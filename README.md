@@ -1,2 +1,414 @@
 # GIZI-POINT
 Simulasi Rekomendasi Menu Sehat
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GiziPoint - Rekomendasi Menu Sehat</title>
+  <style>
+    /* Warna maroon lembut: #A98467 (maroon kecoklatan), #E9DCC9 (krem), #8B5E3C (maroon tua) */
+    :root {
+      --maroon-soft: #A98467;
+      --maroon-dark: #8B5E3C;
+      --cream: #E9DCC9;
+      --light-bg: #F8F3EC;
+      --text: #4B3621;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--light-bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+    }
+
+    header {
+      background-color: var(--maroon-soft);
+      color: white;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      opacity: 0.95;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 25px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      color: var(--maroon-dark);
+      margin-bottom: 16px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--maroon-soft);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .checkbox-item input {
+      margin-right: 6px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--maroon-dark);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #704a2f;
+    }
+
+    #hasil {
+      background-color: #f2e7da;
+      padding: 18px;
+      border-radius: 10px;
+      font-size: 18px;
+      display: none;
+      margin-top: 10px;
+    }
+
+    #riwayat ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    #riwayat li {
+      background-color: #f9f4ed;
+      padding: 12px;
+      margin: 8px 0;
+      border-left: 4px solid var(--maroon-soft);
+      border-radius: 4px;
+    }
+
+    .ilustrasi {
+      background-color: #f6f0e6;
+      padding: 18px;
+      border-radius: 10px;
+      border: 1px dashed var(--maroon-soft);
+    }
+
+    .ilustrasi p {
+      margin: 8px 0;
+    }
+
+    .flow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+
+    .flow-box {
+      background-color: var(--maroon-soft);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin: 0 8px;
+      text-align: center;
+    }
+
+    .arrow {
+      font-size: 24px;
+      color: var(--maroon-dark);
+      margin: 0 6px;
+    }
+
+    .note {
+      font-style: italic;
+      background-color: #fff8f0;
+      padding: 12px;
+      border-radius: 8px;
+      border-left: 3px solid #d4a574;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 15px;
+        padding: 16px;
+      }
+      h1 { font-size: 24px; }
+      .subtitle { font-size: 16px; }
+      .flow-box { padding: 8px 12px; font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🥗 GiziPoint</h1>
+    <p class="subtitle">Rekomendasi menu sehat yang disesuaikan dengan kebutuhan tubuhmu!</p>
+  </header>
+
+  <div class="container">
+    <!-- Form Input -->
+    <div class="section">
+      <h2>Profil & Kebutuhan Nutrisi</h2>
+      
+      <div class="form-group">
+        <label for="usia">Usia (tahun)</label>
+        <input type="number" id="usia" min="10" max="100" placeholder="Contoh: 25">
+      </div>
+
+      <div class="form-group">
+        <label for="berat">Berat Badan (kg)</label>
+        <input type="number" id="berat" min="30" max="200" placeholder="Contoh: 60">
+      </div>
+
+      <div class="form-group">
+        <label for="tinggi">Tinggi Badan (cm)</label>
+        <input type="number" id="tinggi" min="100" max="220" placeholder="Contoh: 165">
+      </div>
+
+      <div class="form-group">
+        <label for="aktivitas">Tingkat Aktivitas Harian</label>
+        <select id="aktivitas">
+          <option value="ringan">Ringan (kerja kantoran, jarang olahraga)</option>
+          <option value="sedang">Sedang (jalan kaki rutin, olahraga 2–3x/minggu)</option>
+          <option value="berat">Berat (olahraga harian, pekerjaan fisik)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="tujuan">Tujuan Nutrisi (opsional)</label>
+        <select id="tujuan">
+          <option value="maintain">Pertahankan berat badan</option>
+          <option value="turun">Turunkan berat badan</option>
+          <option value="naik">Naikkan massa otot</option>
+          <option value="sehat">Perbaiki pencernaan & gaya hidup sehat</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Riwayat Penyakit (opsional)</label>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" id="jantung"> 
+            <label for="jantung">Penyakit jantung</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="diabetes"> 
+            <label for="diabetes">Diabetes</label>
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="hipertensi"> 
+            <label for="hipertensi">Hipertensi</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Preferensi Makanan</label>
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" id="vegetarian"> Vegetarian
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="pedas"> Suka pedas
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="alergiSusu"> Alergi susu
+          </div>
+          <div class="checkbox-item">
+            <input type="checkbox" id="rendahGula"> Hindari gula berlebih
+          </div>
+        </div>
+      </div>
+
+      <button onclick="rekomendasi()">Dapatkan Rekomendasi</button>
+    </div>
+
+    <!-- Hasil -->
+    <div class="section">
+      <h2>Rekomendasi Menu</h2>
+      <div id="hasil"></div>
+    </div>
+
+    <!-- Riwayat -->
+    <div class="section">
+      <h2>Riwayat Rekomendasi</h2>
+      <div id="riwayat">
+        <p>Belum ada rekomendasi.</p>
+      </div>
+    </div>
+
+    <!-- Ilustrasi Model -->
+    <div class="section">
+      <h2>Bagaimana Sistem Ini Bekerja?</h2>
+      <div class="ilustrasi">
+        <div class="flow">
+          <div class="flow-box">Input Pengguna</div>
+          <div class="arrow">→</div>
+          <div class="flow-box">Bandinkan Pola</div>
+          <div class="arrow">→</div>
+          <div class="flow-box">Rekomendasi Menu</div>
+        </div>
+        <p><strong>Langkah 1:</strong> Kamu mengisi data tubuh, aktivitas, dan preferensi.</p>
+        <p><strong>Langkah 2:</strong> Sistem mencocokkan dengan pola rekomendasi nutrisi.</p>
+        <p><strong>Langkah 3:</strong> Sistem menampilkan menu yang paling sesuai untukmu.</p>
+        <div class="note">
+          ⚠️ Catatan: Ini adalah <strong>simulasi edukatif</strong>. Rekomendasi dihasilkan dari aturan sederhana, bukan model machine learning sungguhan.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let riwayat = [];
+
+    function rekomendasi() {
+      // Ambil nilai input
+      const usia = parseInt(document.getElementById('usia').value) || 0;
+      const berat = parseFloat(document.getElementById('berat').value) || 0;
+      const tinggi = parseFloat(document.getElementById('tinggi').value) || 0;
+      const aktivitas = document.getElementById('aktivitas').value;
+      const tujuan = document.getElementById('tujuan').value;
+      const vegetarian = document.getElementById('vegetarian').checked;
+      const pedas = document.getElementById('pedas').checked;
+      const alergiSusu = document.getElementById('alergiSusu').checked;
+      const rendahGula = document.getElementById('rendahGula').checked;
+      const jantung = document.getElementById('jantung').checked;
+      const diabetes = document.getElementById('diabetes').checked;
+
+      // Validasi minimal usia, berat, tinggi
+      if (usia < 10 || berat < 30 || tinggi < 100) {
+        alert("Harap isi usia (min 10), berat (min 30 kg), dan tinggi (min 100 cm) dengan benar.");
+        return;
+      }
+
+      // Hitung BMI & kalori (simulasi)
+      const bmi = (berat / ((tinggi / 100) ** 2)).toFixed(1);
+      let kalori = 0;
+      if (aktivitas === "ringan") kalori = 1800;
+      else if (aktivitas === "sedang") kalori = 2200;
+      else kalori = 2600;
+
+      if (tujuan === "turun") kalori -= 300;
+      if (tujuan === "naik") kalori += 300;
+
+      // Logika rekomendasi (simulasi model ML)
+      let menu = "";
+      if (vegetarian) {
+        if (aktivitas === "berat") {
+          menu = "Tahu tempe panggang + nasi merah + sayur lodeh + smoothie alpukat";
+        } else if (tujuan === "turun") {
+          menu = "Salad quinoa + tumis jamur + sup lentil";
+        } else {
+          menu = "Nasi merah + perkedel jagung + tumis bayam";
+        }
+      } else {
+        if (jantung || diabetes) {
+          menu = "Ikan kukus + nasi merah + tumis brokoli + potongan buah";
+        } else if (aktivitas === "berat") {
+          menu = "Ayam panggang + nasi merah + brokoli kukus + pisang";
+        } else if (tujuan === "turun") {
+          menu = "Telur rebus + salad ayam + yogurt rendah lemak";
+        } else {
+          menu = "Nasi + ayam bakar + sayur asem + tempe goreng";
+        }
+      }
+
+      // Penyesuaian berdasarkan preferensi
+      if (pedas && !menu.includes("pedas")) menu += " (versi pedas)";
+      if (rendahGula) menu += " (rendah gula)";
+      if (alergiSusu) menu += " (bebas susu)";
+
+      // Tampilkan hasil
+      const hasilDiv = document.getElementById('hasil');
+      hasilDiv.innerHTML = `
+        <strong>🍽️ Rekomendasi untuk Kamu:</strong><br>
+        ${menu}<br><br>
+        <em>BMI: ${bmi} | Kebutuhan Kalori Harian: ±${kalori} kkal</em>
+      `;
+      hasilDiv.style.display = "block";
+
+      // Simpan ke riwayat
+      riwayat.unshift(menu + ` (${new Date().toLocaleTimeString()})`);
+      if (riwayat.length > 5) riwayat.pop();
+      tampilkanRiwayat();
+    }
+
+    function tampilkanRiwayat() {
+      const riwayatDiv = document.getElementById('riwayat');
+      if (riwayat.length === 0) {
+        riwayatDiv.innerHTML = "<p>Belum ada rekomendasi.</p>";
+      } else {
+        let html = "<ul>";
+        riwayat.forEach(item => {
+          html += `<li>${item}</li>`;
+        });
+        html += "</ul>";
+        riwayatDiv.innerHTML = html;
+      }
+    }
+  </script>
+
+</body>
+</html>
